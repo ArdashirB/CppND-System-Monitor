@@ -1,17 +1,11 @@
 #include "processor.h"
 #include "linux_parser.h"
 #include <string>
-#include <vector>
 #include <fstream>
-#include <chrono>
-#include <thread>
 #include <unistd.h>
 
 using std::string;
-using std::stof;
 using std::stoi;
-using std::to_string;
-using std::vector;
 
 
 // TODO: Return the aggregate CPU utilization
