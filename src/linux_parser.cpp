@@ -103,7 +103,7 @@ long LinuxParser::UpTime() {
     filestream >> up_time1 >>up_time2;
     // uptime = std::stoi(up_time1);
     long int time{stol(up_time1)};
-    time /= sysconf(_SC_CLK_TCK);
+    // time /= sysconf(_SC_CLK_TCK);
     return time;
   }
   return 0;

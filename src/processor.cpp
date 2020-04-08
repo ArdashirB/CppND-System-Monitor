@@ -11,7 +11,7 @@ using std::stoi;
 // TODO: Return the aggregate CPU utilization
 float Processor::Utilization() { 
     string line, key;
-    float totald, idled, total, prev_total;
+    float totald, idled, prev_total;
     float prev_idle, curr_idle;
     float prev_non_idle, curr_non_idle;
     float curr_total;
@@ -32,7 +32,7 @@ float Processor::Utilization() {
             }
         }
     }
-    usleep(100000);
+    usleep(10000);
 
     std::ifstream filestream2(LinuxParser::kProcDirectory + LinuxParser::kStatFilename);
     if (filestream2.is_open()) {
