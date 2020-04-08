@@ -35,11 +35,16 @@ vector<Process>& System::Processes() {
         a.cpu_util_ = a.CpuUtilization();
         processes_.push_back(a);
     }
-    
+    //Sort them here
+    std::sort(processes_.begin(), processes_.end(), WayToSort);
 
     return processes_; 
 }
 
+bool System::WayToSort(Process a, Process b){
+    return a.ram_>b.ram_;
+    // return true;
+}
 
 
 

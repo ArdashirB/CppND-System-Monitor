@@ -123,25 +123,31 @@ long LinuxParser::ActiveJiffies() { return 0; }
 long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return CPU utilization for a process
-float LinuxParser::CpuUtilization(int pid) { 
-  string line;
-    string key;
-    string value1, value2, value3, value4;
+string LinuxParser::CpuUtilization(int pid) { 
+    long up_time = LinuxParser::UpTime();
+    string line, token;
+    string utime, stime, cutime, cstime, starttime;
+    vector<string> value;
+    float total_time, seconds, cpu_usage;
     std::ifstream filestream(LinuxParser::kProcDirectory + to_string(pid) 
-                            + LinuxParser::kStatusFilename);
+                            + LinuxParser::kStatFilename);
     if (filestream.is_open()) {
         while (std::getline(filestream, line)) {
             std::istringstream linestream(line);
-            while (linestream >> key >> value1 >> value2 >>value3>> value4) {
-                
-                if (key == "Uid:") {
-                    return float();
-                    // return value1;
-                }
+            while (linestream >> token) {
+                value.push_back(token);
             }
+            utime = value[13];
+            stime = value[14];
+            cutime = value[15];
+            cstime = value[16];
+            starttime = value[21]; 
         }
     }
-  return float(); 
+    total_time = stoi(utime) + stoi(stime);
+    seconds = float(up_time) - (stoi(starttime) / sysconf(_SC_CLK_TCK));//up_time in long seconds
+    cpu_usage = (total_time / (sysconf(_SC_CLK_TCK))/seconds);
+  return to_string(cpu_usage); 
 }
 
 
@@ -173,7 +179,7 @@ int LinuxParser::RunningProcesses() {
   return std::stoi(value);
  }
 
-// TODO: Read and return the command associated with a process
+// Done: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Command(int pid) { 
     string line;
@@ -190,7 +196,7 @@ string LinuxParser::Command(int pid) {
     return string(); 
 }
 
-// TODO: Read and return the memory used by a process
+// Done: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid) { 
   string line;
@@ -205,7 +211,7 @@ string LinuxParser::Ram(int pid) {
             while (linestream >> key >> value) {
                 if (key == "VmSize:") {
                     kb = stoi(value);
-                    return to_string(kb/1000);
+                    return to_string(kb/1024);
                 }
             }
         }
