@@ -33,6 +33,7 @@ vector<Process>& System::Processes() {
         a.ram_ = a.Ram();
         a.command_ = a.Command();
         a.cpu_util_ = a.CpuUtilization();
+        a.uptime_ = a.UpTime();
         processes_.push_back(a);
     }
     //Sort them here
@@ -42,8 +43,8 @@ vector<Process>& System::Processes() {
 }
 
 bool System::WayToSort(Process a, Process b){
-    return a.ram_>b.ram_;
-    // return true;
+    return std::stof(a.cpu_util_)>std::stof(b.cpu_util_);
+    // return a.ram_>b.ram_;
 }
 
 
