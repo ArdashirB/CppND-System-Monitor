@@ -153,7 +153,22 @@ string LinuxParser::CpuUtilization(int pid) {
 
 // Done: Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
-  return LinuxParser::Pids().size(); 
+  string line;
+  string key;
+  string value;
+  std::ifstream filestream(kProcDirectory + kStatFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+        if (key == "processes") {
+          return std::stoi(value);
+        }
+      }
+    }
+  }
+  return int();
+  // return LinuxParser::Pids().size(); 
  }
 
 

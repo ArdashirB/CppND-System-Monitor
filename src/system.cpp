@@ -25,16 +25,18 @@ Processor& System::Cpu() {
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
-    
-    for(auto i: LinuxParser::Pids()){
-        Process a(i);
-        a.pid_ = i;
-        a.user_ = a.User();
-        a.ram_ = a.Ram();
-        a.command_ = a.Command();
-        a.cpu_util_ = a.CpuUtilization();
-        a.uptime_ = a.UpTime();
-        processes_.push_back(a);
+    vector<int> pids = LinuxParser::Pids();
+    processes_.clear();
+    for(auto i: pids){
+        // Process a(i);
+        // a.pid_ = i;
+        // a.user_ = a.User();
+        // a.ram_ = a.Ram();
+        // a.command_ = a.Command();
+        // a.cpu_util_ = a.CpuUtilization();
+        // a.uptime_ = a.UpTime();
+        // processes_.push_back(a);
+        processes_.push_back(Process(i));
     }
     //Sort them here
     std::sort(processes_.begin(), processes_.end(), WayToSort);
@@ -43,7 +45,8 @@ vector<Process>& System::Processes() {
 }
 
 bool System::WayToSort(Process a, Process b){
-    return std::stof(a.cpu_util_)>std::stof(b.cpu_util_);
+    return a<b;
+    // return std::stof(a.cpu_util_)>std::stof(b.cpu_util_);
     // return a.ram_>b.ram_;
 }
 

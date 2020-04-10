@@ -14,7 +14,15 @@ using std::vector;
 using std::ifstream;
 
 
-Process::Process(int pid) : pid_(pid) {};
+Process::Process(int pid) : pid_(pid) {
+    // Process a(i);
+    // pid_ = i;
+    user_ = User();
+    ram_ = Ram();
+    command_ = Command();
+    cpu_util_ = CpuUtilization();
+    uptime_ = UpTime();
+};
 
 // TODO: Return this process's ID
 int Process::Pid() { 
@@ -23,7 +31,8 @@ int Process::Pid() {
 
 // TODO: Return this process's CPU utilization
 string Process::CpuUtilization() { 
-    return LinuxParser::CpuUtilization(Pid()); }
+    return LinuxParser::CpuUtilization(Pid()); 
+}
 
 // TODO: Return the command that generated this process
 string Process::Command() { 
@@ -47,4 +56,8 @@ long int Process::UpTime() {
 
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
+bool Process::operator<(Process const &a) const { 
+    // Why doesnt the line below work??
+    // return stol(LinuxParser::CpuUtilization(pid_)) < stol(LinuxParser::CpuUtilization(a.pid_));
+    return stol(LinuxParser::Ram(pid_)) > stol(LinuxParser::Ram(a.pid_));
+}
